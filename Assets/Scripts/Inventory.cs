@@ -1,22 +1,22 @@
 using NUnit.Framework;
-using UnityEngine;
 using System.Collections.Generic;
+using UnityEditor.Rendering;
+using UnityEngine;
 
 public class Inventory : MonoBehaviour
 {
 
     public List<string> items = new List<string>();
-    public string itemName = string.Empty;
 
     public GameManager manager;
     
 
-    public void AddItemToInventory(string ItemName)
+    public void AddItemToInventory(string itemName)
     {
         items.Add(itemName);
     }
 
-    public void RemoveItemFromInventory(string ItemName)
+    public void RemoveItemFromInventory(string itemName)
     {
         items.Remove(itemName);
     }
@@ -30,14 +30,20 @@ public class Inventory : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            AddItemToInventory("Generic Item");
-        }
+        
 
-        if (Input.GetKeyDown(KeyCode.Q))
+
+    }
+
+    private void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        ItemObject collisionItem = hit.gameObject.GetComponent<ItemObject>();
+
+        if (collisionItem != null)
         {
-            RemoveItemFromInventory("Generic Item");
+            items.Add(collisionItem.name);
+            Destroy(collisionItem.gameObject);
         }
     }
+
 }
